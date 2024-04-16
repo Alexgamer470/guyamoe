@@ -11,7 +11,8 @@ services:
     command: python3 -u docker/init.py
     volumes:
       - type: bind
-        source: ../
+        # set the path below to wherever you have cloned this repository.
+        source: /home/pi/guyamoe
         target: /guya
     ports:
       - 8000:8000
