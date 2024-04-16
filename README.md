@@ -4,15 +4,44 @@ Generalized manga reading framework. Adapted for Kaguya-sama manga, but can be u
 Testing Supported By<br/>
 <img width="160" src="http://foundation.zurb.com/sites/docs/assets/img/logos/browser-stack.svg" alt="BrowserStack"/>
 
-⚠ **Note:** The install instructions below will not result in a general purpose CMS due to the amount of hardcoded assets in Guyamoe.
+⚠ **Note:** This install instruction below focuses on Debian OS Bullseye (e.g. RaspberryPi arm64) only.
 
-## Prerequisites 
-- git
-- python 3.6.5+
-- pip
-- virtualenv
+## Docker installation
+1. Clone Guyamoe's repository.
+```
+git clone https://github.com/Alexgamer470/guyamoe /your/installation/path
+```
+2. Change the installation path and HOST_IP to the IP you are going to host on in [`./docker/docker-compose.yml`](https://github.com/Alexgamer470/guyamoe/blob/develop/docker/docker-compose.yml)
 
-## Install
+3. Run the docker files
+```
+cd ./docker && docker compose build && docker compose up
+```
+## Portainer
+1. Clone Guyamoe's repository.
+```
+git clone https://github.com/Alexgamer470/guyamoe /your/installation/path
+```
+
+2. Create a custom template with build method `Repository`, paste the URL of this repository into `Repository URL` and set the `Compose path` to `docker/docker-compose.yml`. Click on `Create custom template`.
+
+3. Now click on the template and then on `View stack` (directly under the template's name).
+
+4. Edit the installation path to the path where you have cloned this repository and `HOST_IP` to the IP you are going to host on. Click on `Deploy the stack`.
+
+## Direct installation
+
+### Install prerequisites 
+- `git`
+- `python 3.6.5+ (incl. dependencies)`
+- `python psycopg2 dependencies (libpq-dev)`
+- `pip`
+- `virtualenv`
+```
+sudo apt install git python3 build-essential python3-dev libpq-dev python3-pip virtualenv
+```
+
+### Direct installation
 1. Create a venv for Guyamoe in your home directory.
 ```
 virtualenv ~/guyamoe
@@ -20,7 +49,7 @@ virtualenv ~/guyamoe
 
 2. Clone Guyamoe's source code into the venv.
 ```
-git clone https://github.com/appu1232/guyamoe ~/guyamoe/app
+git clone https://github.com/Alexgamer470/guyamoe ~/guyamoe/app
 ```
 
 3. Activate the venv.
@@ -32,6 +61,7 @@ cd ~/guyamoe/app && source ../bin/activate
 ```
 pip3 install -r requirements.txt
 ```
+At this point you may get an error that pg_config is missing. In that case, you're missing the `libpq-dev` package. [Install development version of PostgreSQL.](https://stackoverflow.com/questions/11618898/pg-config-executable-not-found)
 
 5. Change the value of the `SECRET_KEY` variable to a randomly generated string.
 ```
@@ -46,6 +76,11 @@ python3 init.py
 7. Create an admin user for Guyamoe.
 ```
 python3 manage.py createsuperuser
+```
+
+8. Collect static files. Otherwise the admin static files won't be accessible.
+```
+python3 manage.py collectstatic
 ```
 
 Before starting the server, create a `media` folder in the base directory. Add manga with the corresponding chapters and page images. Structure it like so:
@@ -63,9 +98,10 @@ E.g. `Kaguya-Wants-To-Be-Confessed-To` for `<series-slug-name>`.
 **Note:** Zero pad chapter folder numbers like so: `001` for the Kaguya series (this is how the fixtures data for the series has it). It doesn't matter for pages though nor does it have to be .jpg. Only thing required for pages is that the ordering can be known from a simple numerical/alphabetical sort on the directory.
 
 ## Start the server
--  `python3 manage.py runserver` - keep this console active
-
-Now the site should be accessible on localhost:8000
+This will host the website on localhost:8000
+-  `python3 manage.py runserver` - Keep this console active, otherwise the server will be closed.
+For some peopple the command above wont make the site accessable. In that case run:
+-  `python manage.py runserver 0.0.0.0` - remember to replace `localhost` with your hosts internal IP in `./guyamoe/settings/local.py`, in order to add it to `ALLOWED_HOSTS`.
 
 ## Other info
 Relevant URLs (as of now): 
