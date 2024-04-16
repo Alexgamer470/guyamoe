@@ -6,6 +6,17 @@ Testing Supported By<br/>
 
 ⚠ **Note:** This install instruction below focuses on Debian OS Bullseye (e.g. RaspberryPi arm64) only.
 
+## Navigation
+- [Docker installation (recommended)](https://github.com/Alexgamer470/guyamoe#docker-installation)
+- [Portainer installation](https://github.com/Alexgamer470/guyamoe#portainer-installation)
+- [Direct installation](https://github.com/Alexgamer470/guyamoe#direct-installation)
+  - [Install prerequisites](https://github.com/Alexgamer470/guyamoe#install-prerequisites)
+  - [Install guyamoe](https://github.com/Alexgamer470/guyamoe#install-guyamoe)
+  - [Start the server](https://github.com/Alexgamer470/guyamoe#start-the-server)
+- [Other info](https://github.com/Alexgamer470/guyamoe#other-info)
+  - [Relevant URLs](https://github.com/Alexgamer470/guyamoe#relevant-urls)
+  - [Folder structure](https://github.com/Alexgamer470/guyamoe#folder-structure)
+
 ## Docker installation
 1. Clone Guyamoe's repository.
 ```
@@ -17,7 +28,7 @@ git clone https://github.com/Alexgamer470/guyamoe /your/installation/path
 ```
 cd ./docker && docker compose build && docker compose up
 ```
-## Portainer
+## Portainer installation
 1. Clone Guyamoe's repository.
 ```
 git clone https://github.com/Alexgamer470/guyamoe /your/installation/path
@@ -41,7 +52,7 @@ git clone https://github.com/Alexgamer470/guyamoe /your/installation/path
 sudo apt install git python3 build-essential python3-dev libpq-dev python3-pip virtualenv
 ```
 
-### Direct installation
+### Install Guyamoe
 1. Create a venv for Guyamoe in your home directory.
 ```
 virtualenv ~/guyamoe
@@ -83,6 +94,28 @@ python3 manage.py createsuperuser
 python3 manage.py collectstatic
 ```
 
+**Note:** Zero pad chapter folder numbers like so: `001` for the Kaguya series (this is how the fixtures data for the series has it). It doesn't matter for pages though nor does it have to be .jpg. Only thing required for pages is that the ordering can be known from a simple numerical/alphabetical sort on the directory.
+
+### Start the server
+This will host the website on localhost:8000
+-  `python3 manage.py runserver` - Keep this console active, otherwise the server will be closed.
+
+For some peopple the command above won't make the site accessible. In that case run:
+-  `python manage.py runserver 0.0.0.0` - remember to replace `localhost` with your hosts internal IP in `./guyamoe/settings/local.py`, in order to add it to `ALLOWED_HOSTS`.
+
+## Other info
+### Relevant URLs: 
+
+- `/` - home page
+- `/about` - about page
+- `/admin` - admin view (login with created user above)
+- `/admin_home` - admin endpoint for clearing the site's cache
+- `/reader/series/<series_slug_name>` - series info and all chapter links
+- `/reader/series/<series_slug_name>/<chapter_number>/<page_number>` - url scheme for reader opened on specfied page of chapter of series.
+- `/api/series/<series_slug_name>` - all series data requested by reader frontend
+- `/media/manga/<series_slug_name>/<chapter_number>/<page_file_name>` - url scheme to used by reader to actual page as an image.
+
+### Folder structure
 Before starting the server, create a `media` folder in the base directory. Add manga with the corresponding chapters and page images. Structure it like so:
 ```
 media
@@ -94,23 +127,3 @@ media
             └───...
 ```
 E.g. `Kaguya-Wants-To-Be-Confessed-To` for `<series-slug-name>`. 
-
-**Note:** Zero pad chapter folder numbers like so: `001` for the Kaguya series (this is how the fixtures data for the series has it). It doesn't matter for pages though nor does it have to be .jpg. Only thing required for pages is that the ordering can be known from a simple numerical/alphabetical sort on the directory.
-
-## Start the server
-This will host the website on localhost:8000
--  `python3 manage.py runserver` - Keep this console active, otherwise the server will be closed.
-For some peopple the command above wont make the site accessable. In that case run:
--  `python manage.py runserver 0.0.0.0` - remember to replace `localhost` with your hosts internal IP in `./guyamoe/settings/local.py`, in order to add it to `ALLOWED_HOSTS`.
-
-## Other info
-Relevant URLs (as of now): 
-
-- `/` - home page
-- `/about` - about page
-- `/admin` - admin view (login with created user above)
-- `/admin_home` - admin endpoint for clearing the site's cache
-- `/reader/series/<series_slug_name>` - series info and all chapter links
-- `/reader/series/<series_slug_name>/<chapter_number>/<page_number>` - url scheme for reader opened on specfied page of chapter of series.
-- `/api/series/<series_slug_name>` - all series data requested by reader frontend
-- `/media/manga/<series_slug_name>/<chapter_number>/<page_file_name>` - url scheme to used by reader to actual page as an image.
